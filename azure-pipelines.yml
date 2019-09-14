@@ -12,18 +12,62 @@ pr:
   - master
   - releases/*
 
-
 pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+
+- task: DeleteFiles@1
+  displayName: 'Delete JUnit files'
+  inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)/junit'
+    Contents: 'TESTS*.xml'
+    
 - task: NodeTool@0
   inputs:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
-- script: |
-    npm install -g @angular/cli
-    npm install
-    ng build --prod
-  displayName: 'npm install and build'
+- script: npm install
+  displayName: 'npm install'
+
+- script: npm run build-prod
+  displayName: 'npm build'
+
+- script: npm run test-no-watch
+  displayName: 'npm test'
+
+- task: PublishTestResults@2
+  displayName: 'Publish unit test results'
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFormat: JUnit
+    testResultsFiles: '**/TESTS*.xml'
+    searchFolder: '$(System.DefaultWorkingDirectory)/junit'
+    testRunTitle: 'Unit tests'
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage results'
+  condition: succeededOrFailed()
+  inputs: 
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/coverage'
+
+- script: npm run lint
+  displayName: 'npm lint'
+
+- script: ./node_modules/protractor/bin/webdriver-manager update --standalone false --gecko false
+  displayName: 'update web driver'
+
+- script: npm run e2e
+  displayName: 'npm End to End Test'
+
+- task: PublishTestResults@2
+  displayName: 'Publish End to End test results'
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFormat: JUnit
+    testResultsFiles: "**/junit*.xml"
+    searchFolder: '$(System.DefaultWorkingDirectory)/e2e/junit'
+    testRunTitle: 'E2E tests'

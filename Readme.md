@@ -1,5 +1,7 @@
 # HoneyPock
 
+[![Build Status](https://kentapsoba.visualstudio.com/Honey%20Pock/_apis/build/status/ktapsoba.honey-pock?branchName=master)](https://kentapsoba.visualstudio.com/Honey%20Pock/_build/latest?definitionId=2&branchName=master)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.4.
 
 ## Development server
