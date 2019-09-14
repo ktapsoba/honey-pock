@@ -19,7 +19,13 @@ module.exports = function (config) {
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, './coverage/honey-pock'),
       reports: ['html', 'lcovonly', 'text-summary', 'cobertura'],
-      fixWebpackSourcePaths: true
+      fixWebpackSourcePaths: true,
+      thresholds: {
+        statements: 80,
+        lines: 80,
+        branches: 80,
+        functions: 80
+      }
     },
     junitReporter: {
       outputDir: require('path').join(__dirname, './junit')

@@ -71,3 +71,17 @@ steps:
     testResultsFiles: "**/junit*.xml"
     searchFolder: '$(System.DefaultWorkingDirectory)/e2e/junit'
     testRunTitle: 'E2E tests'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish firebase.json'
+  inputs:
+    PathtoPublish: '$(System.DefaultWorkingDirectory)/firebase.json'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish dist'
+  inputs:
+    PathtoPublish: '$(System.DefaultWorkingDirectory)/dist'
+    ArtifactName: 'drop/dist'
+    publishLocation: 'Container'
