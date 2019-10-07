@@ -37,6 +37,7 @@ speed-measure-plugin*.json
 /coverage
 /junit
 /e2e/junit
+/documentation
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log

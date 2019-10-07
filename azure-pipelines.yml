@@ -56,12 +56,15 @@ steps:
 
 - script: npm run lint
   displayName: 'npm lint'
+  condition: succeededOrFailed()
 
 - script: ./node_modules/protractor/bin/webdriver-manager update --standalone false --gecko false
   displayName: 'update web driver'
+  condition: succeededOrFailed()
 
 - script: npm run e2e
   displayName: 'npm End to End Test'
+  condition: succeededOrFailed()
 
 - task: PublishTestResults@2
   displayName: 'Publish End to End test results'
@@ -72,8 +75,13 @@ steps:
     searchFolder: '$(System.DefaultWorkingDirectory)/e2e/junit'
     testRunTitle: 'E2E tests'
 
+- script: npm run generate-docs-prod
+  displayName: 'npm Generate Project Documentation'
+  condition: succeededOrFailed()
+
 - task: PublishBuildArtifacts@1
   displayName: 'Publish firebase.json'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   inputs:
     PathtoPublish: '$(System.DefaultWorkingDirectory)/firebase.json'
     ArtifactName: 'drop'
@@ -81,6 +89,7 @@ steps:
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish dist'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   inputs:
     PathtoPublish: '$(System.DefaultWorkingDirectory)/dist'
     ArtifactName: 'drop/dist'

@@ -11,6 +11,7 @@ module.exports = function (config) {
       require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
       require('@angular-devkit/build-angular/plugins/karma'),
+      require('karma-spec-reporter'),
       require('karma-junit-reporter')
     ],
     client: {
@@ -30,12 +31,12 @@ module.exports = function (config) {
     junitReporter: {
       outputDir: require('path').join(__dirname, './junit')
     },
-    reporters: ['progress', 'kjhtml', 'junit'],
+    reporters: ['spec', 'kjhtml', 'junit'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['ChromeHeadless'],
+    browsers: ['Chrome'],
     singleRun: false,
     restartOnFileChange: true
   });

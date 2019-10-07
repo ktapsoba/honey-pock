@@ -1,6 +1,7 @@
 # HoneyPock
 
-[![Build Status](https://kentapsoba.visualstudio.com/Honey%20Pock/_apis/build/status/ktapsoba.honey-pock?branchName=master)](https://kentapsoba.visualstudio.com/Honey%20Pock/_build/latest?definitionId=2&branchName=master)
+[![Build Status](https://kentapsoba.visualstudio.com/Honey%20Pock/_apis/build/status/ktapsoba.honey-pock?branchName=master)](https://kentapsoba.visualstudio.com/Honey%20Pock/_build/latest?definitionId=2&branchName=master) 
+<img src="https://vsrm.dev.azure.com/kentapsoba/_apis/public/Release/badge/2155a726-8b92-45b2-bf2d-b549be9e7310/1/1"/>
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.4.
 
