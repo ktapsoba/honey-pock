@@ -1,0 +1,121 @@
+<div class="pocketDetail">
+  <form [formGroup]="pocketForm" (ngSubmit)="onSubmit(pocketForm.value)">
+    <h2 mat-dialog-title>{{ actionName }} Pocket</h2>
+    <mat-dialog-content>
+      <mat-grid-list cols="3" rowHeight="2:1">
+        <mat-grid-tile colspan="2">
+          <mat-form-field class="pocketDetailField">
+            <input matInput placeholder="Name" formControlName="name" />
+            <!--<mat-error *ngIf="name.errors.required">
+              Name is required
+            </mat-error>-->
+            <mat-error *ngIf="name.hasError('required')">
+              Name is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="name.hasError('nameAvailable')">
+              Name not available is <strong>required</strong>
+            </mat-error>
+            <!--<mat-error *ngIf="name.hasError('nameAvailable')">
+              Pocket with name {{ name.value }} already exists. Choose a
+              different name.
+            </mat-error>-->
+          </mat-form-field>
+          {{ name.errors | json }}
+        </mat-grid-tile>
+        <mat-grid-tile rowspan="3">
+          <mat-form-field>
+            <textarea
+              matInput
+              rows="15"
+              placeholder="Description"
+              formControlName="description"
+            ></textarea>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="2">
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Current Balance"
+              currencyMask
+              formControlName="currentBalance"
+            />
+            <mat-error
+              *ngIf="
+                currentBalance.hasError('currentBalanceMoreThanTargetBalance')
+              "
+            >
+              Current balance should be less than target amount
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field colspan="2">
+            <input
+              matInput
+              placeholder="Target Balance"
+              currencyMask
+              formControlName="targetBalance"
+            />
+            <mat-error *ngIf="targetBalance.hasError('required')">
+              Target balance is required
+            </mat-error>
+            <mat-error *ngIf="targetBalance.hasError('min')">
+              Minimum amount should be $2.00
+            </mat-error>
+            <mat-error
+              *ngIf="
+                targetBalance.hasError('targetBalanceLessThanSavingAmount')
+              "
+            >
+              Target balance should be more than the saving amount
+            </mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="2">
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Saving Amount"
+              currencyMask
+              formControlName="savingAmount"
+            />
+            <mat-error *ngIf="savingAmount.hasError('required')">
+              Target balance is required
+            </mat-error>
+            <mat-error *ngIf="savingAmount.hasError('min')">
+              Minimum amount should be $1.00
+            </mat-error>
+            <mat-error
+              *ngIf="savingAmount.hasError('savingAmountMoreThanTargetBalance')"
+            >
+              Saving amount should be less than the target amount
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field colspan="2">
+            <mat-label>Saving Frequency</mat-label>
+            <mat-select formControlName="savingFrequency">
+              <mat-option
+                *ngFor="let frequency of frequencies"
+                [value]="frequency"
+                >{{ frequency }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!pocketForm.valid"
+      >
+        {{ actionName }}
+      </button>
+      <button mat-raised-button color="warn" type="button" mat-dialog-close>
+        cancel
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>

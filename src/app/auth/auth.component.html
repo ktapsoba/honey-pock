@@ -1,17 +1,29 @@
-<div *ngIf="isLoggedIn(); then signout else signin"></div>
+<div *ngIf="isLoggedIn(); then signout; else signin"></div>
 
 <ng-template #signin>
-  <button mat-button [matMenuTriggerFor]="signinMenu" class="signin">Sign in</button>
+  <button mat-button [matMenuTriggerFor]="signinMenu" class="signin">
+    Sign in
+  </button>
   <mat-menu #signinMenu="matMenu">
     <span *ngFor="let loginProtocol of loginProtocols">
-      <button mat-menu-item (click)="login(loginProtocol)" class="loginProtocol">{{loginProtocol.name}}</button>
+      <button
+        mat-menu-item
+        (click)="login(loginProtocol)"
+        class="loginProtocol"
+      >
+        {{ loginProtocol.name }}
+      </button>
     </span>
   </mat-menu>
 </ng-template>
 
 <ng-template #signout>
-  <button mat-button [matMenuTriggerFor]="signoutMenu" class="welcomeName">Welcome {{ displayName }}</button>
+  <button mat-button [matMenuTriggerFor]="signoutMenu" class="welcomeName">
+    Welcome {{ displayName }}
+  </button>
   <mat-menu #signoutMenu="matMenu">
-    <button mat-menu-item (click)="doSignout()" class="signout">Sign out</button>
+    <button mat-menu-item (click)="doSignout()" class="signout">
+      Sign out
+    </button>
   </mat-menu>
 </ng-template>
