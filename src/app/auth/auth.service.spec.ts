@@ -8,6 +8,7 @@ import { MockRouter } from '../mocks/mock-router';
 import { MockAuth } from '../mocks/mock-auth';
 import { User } from './user.model';
 import { auth } from 'firebase';
+import { of } from 'rxjs';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -20,6 +21,10 @@ describe('AuthService', () => {
     mockAuth = new MockAuth();
     mockAngularFireAuth = new MockAngularFireAuth();
     mockAngularFireAuth.auth = mockAuth;
+    mockAngularFireAuth.authState = of({
+      uid: '123',
+      displayName: 'Test user'
+    });
     TestBed.configureTestingModule({
       providers: [
         { provide: AngularFireAuth, useValue: mockAngularFireAuth },
@@ -38,12 +43,14 @@ describe('AuthService', () => {
   });
 
   it('should login with expected user info back', fakeAsync(() => {
-    spyOn(mockAuth, 'signInWithPopup').and.returnValue(Promise.resolve({
-      user: {
-        uid: '222',
-        displayName: 'Test Test'
-      }
-    }));
+    spyOn(mockAuth, 'signInWithPopup').and.returnValue(
+      Promise.resolve({
+        user: {
+          uid: '222',
+          displayName: 'Test Test'
+        }
+      })
+    );
 
     service.login(provider);
     tick();
@@ -53,8 +60,10 @@ describe('AuthService', () => {
     expect(user.name).toBe('Test Test');
   }));
 
-  it('should log error when there\'s an error during login', fakeAsync(() => {
-    spyOn(mockAuth, 'signInWithPopup').and.returnValue(Promise.reject('error login'));
+  it(`should log error when there's an error during login`, fakeAsync(() => {
+    spyOn(mockAuth, 'signInWithPopup').and.returnValue(
+      Promise.reject('error login')
+    );
     spyOn(console, 'error');
     service.login(provider);
     tick();
@@ -71,8 +80,10 @@ describe('AuthService', () => {
     expect(service.user).toBeNull();
   }));
 
-  it('should log error when there\s and error during logout', fakeAsync(() => {
-    spyOn(mockAuth, 'signOut').and.returnValue(Promise.reject('Failed to logout'));
+  it('should log error when theres and error during logout', fakeAsync(() => {
+    spyOn(mockAuth, 'signOut').and.returnValue(
+      Promise.reject('Failed to logout')
+    );
     spyOn(console, 'error');
     service.logout();
     tick();
@@ -87,6 +98,4 @@ describe('AuthService', () => {
   it('should return false when user is not authenticated', () => {
     expect(service.isAuthenticated()).toBeFalsy();
   });
-
 });
-

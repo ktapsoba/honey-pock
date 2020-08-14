@@ -14,24 +14,30 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './material.module';
 import { AuthService } from './auth/auth.service';
+import { PocketComponent } from './pocket/pocket.component';
+import { PocketDetailComponent } from './pocket/pocket-detail/pocket-detail.component';
+import { PocketService } from './pocket/pocket.service';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        AuthComponent
-    ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        AngularFireModule.initializeApp(environment.firebase),
-        AngularFireAuthModule,
-        AngularFirestoreModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MaterialModule
-    ],
-    providers: [AuthService, AngularFireAuthGuard],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    AuthComponent,
+    PocketComponent,
+    PocketDetailComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    AngularFirestoreModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MaterialModule
+  ],
+  entryComponents: [PocketDetailComponent],
+  providers: [AuthService, AngularFireAuthGuard, PocketService],
+  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

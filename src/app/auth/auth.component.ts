@@ -11,7 +11,6 @@ import { LoginProtocol } from './login-protocol';
   styleUrls: ['./auth.component.less']
 })
 export class AuthComponent implements OnInit {
-
   /** The user display name */
   displayName: string;
 
@@ -23,7 +22,7 @@ export class AuthComponent implements OnInit {
    *
    * @param authService the auth service
    */
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {}
 
   /** Initialize values for the component */
   ngOnInit() {
@@ -34,9 +33,13 @@ export class AuthComponent implements OnInit {
    * Login using google
    */
   login(loginProtocol: LoginProtocol): void {
-    this.authService.login(loginProtocol.provider).then(displayName => {
-      this.displayName = displayName;
-    })
+    this.authService
+      .login(loginProtocol.provider)
+      .then(displayName => {
+        this.authService.getCurrentUser().then(user => {
+          this.displayName = user.name;
+        });
+      })
       .catch(err => {
         console.error(err);
       });
@@ -58,5 +61,4 @@ export class AuthComponent implements OnInit {
   isLoggedIn(): boolean {
     return this.authService.isAuthenticated();
   }
-
 }

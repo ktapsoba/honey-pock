@@ -4,6 +4,7 @@ import { auth } from 'firebase/app';
 import { Router } from '@angular/router';
 import { User } from './user.model';
 import { LoginProtocol } from './login-protocol';
+import { Observable } from 'rxjs';
 
 /**
  * The auth service
@@ -12,9 +13,9 @@ import { LoginProtocol } from './login-protocol';
   providedIn: 'root'
 })
 export class AuthService {
-
   /** The user object */
   user: User;
+  private authState: Observable<firebase.User>;
 
   /** The list of login protocols */
   private loginProtocols: LoginProtocol[] = [];
@@ -25,7 +26,18 @@ export class AuthService {
    * @param angularFireAuth the angular fire auth component
    * @param router the router
    */
-  constructor(private angularFireAuth: AngularFireAuth, private router: Router) {
+  constructor(
+    private angularFireAuth: AngularFireAuth,
+    private router: Router
+  ) {
+    this.authState = angularFireAuth.authState;
+    this.authState.subscribe(currentUser => {
+      if (currentUser) {
+        this.user = new User(currentUser.uid, currentUser.displayName);
+      } else {
+        this.user = null;
+      }
+    });
     this.intializeLoginProtocols();
   }
 
@@ -53,16 +65,17 @@ export class AuthService {
    */
   login(provider: auth.AuthProvider): Promise<string> {
     return new Promise<any>((resolve, reject) => {
-      this.angularFireAuth.auth.signInWithPopup(provider)
-        .then(
-          result => {
-            this.user = new User(result.user.uid, result.user.displayName);
-            resolve(this.user.name);
-          },
-          error => {
-            this.handleError(error);
-          }
-        );
+      this.angularFireAuth.auth.signInWithPopup(provider).then(
+        result => {
+          this.user = new User(result.user.uid, result.user.displayName);
+          console.log(this.user.name);
+          resolve(this.user.name);
+          this.router.navigate(['pocket']);
+        },
+        error => {
+          this.handleError(error);
+        }
+      );
     });
   }
 
@@ -70,7 +83,8 @@ export class AuthService {
    * Log out of the application
    */
   logout(): void {
-    this.angularFireAuth.auth.signOut()
+    this.angularFireAuth.auth
+      .signOut()
       .then(() => {
         this.user = null;
         this.router.navigate(['/']);
@@ -96,5 +110,17 @@ export class AuthService {
    */
   handleError(err: any): void {
     console.error(err);
+  }
+
+  getCurrentUser() {
+    return new Promise<User>((resolve, reject) => {
+      this.angularFireAuth.auth.onAuthStateChanged(returnedUser => {
+        if (returnedUser) {
+          resolve(new User(returnedUser.uid, returnedUser.displayName));
+        } else {
+          reject(null);
+        }
+      });
+    });
   }
 }
